@@ -1,0 +1,6 @@
+/nbproject/
+/nocommit/
+/lib/
+runtests
+*.o
+runtestslinked

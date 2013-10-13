@@ -62,13 +62,6 @@ extern "C" {
     } pcap_packet;
 
 
-
-    void printPacketHeader(pcap_packet_header* header);
-    void printPacketData(pcap_packet_data* header);
-    void printFileHeader(pcap_header* header);
-    void printFile(pcap_file* header);
-
-
 #ifdef	__cplusplus
 }
 #endif

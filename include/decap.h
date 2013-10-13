@@ -78,15 +78,6 @@ extern "C" {
      */
     int more(pcap_file* pcapFile);
 
-    /**
-     * Finds every packet header in the pcap file and prints it.
-     * 
-     * @param pcapFile The file to enumerate.
-     * @return Non-zero on success.
-     */
-    int debug_printPackets(pcap_file* pcapFile);
-
-
 
 #ifdef	__cplusplus
 }

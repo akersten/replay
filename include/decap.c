@@ -33,7 +33,7 @@ int load(int fd, pcap_file* pcapFile, int fixedSize) {
 
     if (headerBytesRead != sizeof (pcap_header)) {
         fprintf(stderr, "During header read, read %d bytes but expected %d.\n",
-                headerBytesRead, sizeof (pcap_header));
+                headerBytesRead, (int) sizeof (pcap_header));
         return 0;
     }
 
@@ -95,16 +95,16 @@ int readPacket(pcap_file* pcapFile, pcap_packet* packet) {
     
 
     //Determine the length of this packet and allocate appropriately.
-    packet->payload.size = packet->header.incl_len;
-    if (packet->payload.size < 1) {
+    packet->payload.payloadSize = packet->header.incl_len;
+    if (packet->payload.payloadSize < 1) {
         fprintf(stderr, "Packet length less than 1?\n");
         return 0;
     }
 
-    packet->payload.data = malloc(packet->payload.size);
+    packet->payload.data = malloc(packet->payload.payloadSize);
 
-    if (read(pcapFile->fd, packet->payload.data, packet->payload.size)
-            != packet->payload.size) {
+    if (read(pcapFile->fd, packet->payload.data, packet->payload.payloadSize)
+            != packet->payload.payloadSize) {
         fprintf(stderr,
                 "Hit EOF reading data, but should have seen it coming.\n");
         unloadPacket(packet);
@@ -120,6 +120,7 @@ int unloadPacket(pcap_packet* packet) {
 
 
     free(packet->payload.data);
+    return 1;
 }
 
 int more(pcap_file* pcapFile) {
@@ -138,29 +139,4 @@ int more(pcap_file* pcapFile) {
     lseek(pcapFile->fd, cur, SEEK_SET);
 
     return (cur != end);
-}
-
-int debug_printPackets(pcap_file* pcapFile) {
-    int ret = 1;
-
-    printFile(pcapFile);
-    printFileHeader(pcapFile->header);
-
-    pcap_packet* ppk = malloc(sizeof (pcap_packet));
-
-    //Read until we can't anymore.
-    while (more(pcapFile)) {
-        if (!readPacket(pcapFile, ppk)) {
-            ret = 0;
-            break;
-        }
-
-        printPacketHeader(&(ppk->header));
-        printPacketData(&(ppk->payload));
-        unloadPacket(ppk);
-    }
-
-
-    free(ppk);
-    return ret;
 }

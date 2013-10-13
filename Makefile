@@ -1,5 +1,5 @@
 all:
-	gcc -g -Wall src/*.c include/*.c -o replay
+	gcc -g -Wall include/*.c src/*.c -o replay
 tests:
 	gcc -g -o runtests test/*.c src/*.c include/*.c
 	./runtests

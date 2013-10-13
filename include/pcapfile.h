@@ -41,7 +41,7 @@ extern "C" {
     } pcap_file;
 
     typedef struct {
-        uint32_t size;
+        uint32_t payloadSize;
         uint8_t* data;
     } pcap_packet_data;
 
